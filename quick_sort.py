@@ -23,32 +23,33 @@ import random
 #         return data
 
 
-def partition(nums, left, right):
-    # 对分割的部分进行排序
-    # 选取了最右边，因此小于的时候指针不动，大于的时候指针移动，如果选取最左边，后面的代码反过来。
-    pivot_num = nums[right]
-    i = left
-    j = right
-    # 没重合指针调整没结束。
-    while i < j:
-        if nums[i] <= pivot_num:
-            i += 1
-        else:
-            nums[i], nums[j] = nums[j], nums[i]
-            j -= 1
-    # 将选取的结果放到重合的位置。
-    nums[i] = pivot_num
-    # 返回重合的位置
-    return i
-
-
-def quick_sort(nums, left, right):
+def quick_sort(arr, left, right):
     if left < right:
-        # 当分割的位置没有重叠就继续递归
-        pivot = partition(nums, left, right)
-        quick_sort(nums, left, pivot - 1)
-        quick_sort(nums, pivot + 1, right)
-    return nums
+        # 找到分割点
+        pivot_index = partition(arr, left, right)
+
+        # 对左右两部分分别进行快速排序
+        quick_sort(arr, left, pivot_index - 1)
+        quick_sort(arr, pivot_index + 1, right)
+
+    return arr
+
+
+def partition(arr, left, right):
+    # 选择最右边的元素作为分割点
+    pivot = arr[right]
+    i = left - 1
+
+    # 将小于分割点的元素交换到左边，大于分割点的元素交换到右边
+    for j in range(left, right):
+        if arr[j] < pivot:
+            i += 1
+            arr[i], arr[j] = arr[j], arr[i]
+
+    # 将分割点移动到正确的位置上
+    arr[i + 1], arr[right] = arr[right], arr[i + 1]
+
+    return i + 1
 
 if __name__ == '__main__':
     data_list = [random.randint(1, 40) for x in range(random.randint(5, 10))]
